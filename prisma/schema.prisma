@@ -9,3 +9,13 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// 음식 이미지 테이블
+model FoodImage {
+  id        Int      @id @default(autoincrement())
+  RSTR_ID   Int
+  RSTR_NM  String
+  AREA_NM  String
+  MENU_ID  Int
+  FOOD_IMG_URL       String
+}

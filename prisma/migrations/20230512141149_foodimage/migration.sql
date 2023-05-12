@@ -1,0 +1,11 @@
+-- CreateTable
+CREATE TABLE "FoodImage" (
+    "id" SERIAL NOT NULL,
+    "RSTR_ID" INTEGER NOT NULL,
+    "RSTR_NM" TEXT NOT NULL,
+    "AREA_NM" TEXT NOT NULL,
+    "MENU_ID" INTEGER NOT NULL,
+    "FOOD_IMG_URL" TEXT NOT NULL,
+
+    CONSTRAINT "FoodImage_pkey" PRIMARY KEY ("id")
+);

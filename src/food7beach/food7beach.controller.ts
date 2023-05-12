@@ -1,5 +1,6 @@
+import { FoodImageDto } from './dto/foodImage.dto';
 import { Food7beachService } from './food7beach.service';
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get } from '@nestjs/common';
 
 @Controller('food7beach')
 export class Food7beachController {
