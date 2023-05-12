@@ -1,16 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class Food7beachService {
-  async getFood7beach() {
+  constructor(private configService: ConfigService) {}
+  BASE_URL = `${this.configService.get<string>('FOOD7BEACH_BASE_URL')}`;
+  API_KEY = `${this.configService.get<string>('FOOD7BEACH_API_KEY')}`;
+
+  async getFoodImage() {
+    console.log(this.BASE_URL);
     try {
-      const response = await axios.get(
-        'https://busan-7beach.openapi.redtable.global/api/rstr?serviceKey= k6n6auirB4RainsimXQsPzYW1KXz2i3xBgaqKX54lXGcENz2sHTg7g4zuLG3BioL',
-      );
-      console.log(response);
+      const response = await axios.get(`${this.BASE_URL}/api/food/img`, {
+        params: {
+          serviceKey: this.API_KEY,
+        },
+      });
+      return response.data;
     } catch (err) {
-      console.log(err);
+      return err;
     }
   }
 }

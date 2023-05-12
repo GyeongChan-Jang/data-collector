@@ -1,9 +1,12 @@
 import { Food7beachService } from './food7beach.service';
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller('food7beach')
 export class Food7beachController {
-  constructor(private food7beachService: Food7beachService) {
-    this.food7beachService = food7beachService;
+  constructor(private food7beachService: Food7beachService) {}
+
+  @Get('food-image')
+  async getFoodImage() {
+    return await this.food7beachService.getFoodImage();
   }
 }
