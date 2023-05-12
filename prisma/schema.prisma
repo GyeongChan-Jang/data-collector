@@ -17,5 +17,9 @@ model FoodImage {
   RSTR_NM  String
   AREA_NM  String
   MENU_ID  Int
-  FOOD_IMG_URL       String
+  FOOD_IMG_URL String
 }
+
+// 메뉴 테이블
+
+// 식당 테이블
