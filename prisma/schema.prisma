@@ -10,16 +10,70 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 음식 이미지 테이블
-model FoodImage {
-  id        Int      @id @default(autoincrement())
-  RSTR_ID   Int
-  RSTR_NM  String
-  AREA_NM  String
-  MENU_ID  Int
-  FOOD_IMG_URL String
+model Restaurant {
+  rstrId String @id
+  rstrName String
+  rstrRoadAddr String // 도로명주소
+  rstrLotNumberAddr String // 지번주소
+  rstrLat String // 위도
+  rstrLng String // 경도
+  rstrPhone String
+  bizName String // 영업신고증 업태명
+  bizLicencename String // 영업인허가명
+  rstrDescription String // 식당소개
+
+  menus Menu[]
+  menuDetails MenuDetail[]
+  restaurantImages RestaurantImage[]
+  foodImages FoodImage[]
 }
 
-// 메뉴 테이블
+model Menu {
+  menuId String @id 
+  menuName String
+  menuPrice Int
+  isSpecial String // 지역특산메뉴여부 Y or N
+  specialName String? // 지역특산메뉴명 string or null
+  specialUrl String?
+  areaName String
+  rstrId String // 식당 id
 
-// 식당 테이블
+  restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
+  menuDetails MenuDetail[]
+  foodImages FoodImage[]
+}
+
+model MenuDetail {
+  menuDetailId String @id
+  menuName String
+  menuDescription String?
+  menuCategoryL String // 대분류 
+  menuCategoryS String? // 소분류
+  menuId String
+  rstrName String
+  areaName String
+
+  menu Menu @relation(fields: [menuId], references: [menuId])
+  rstrId String
+  restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
+}
+
+model RestaurantImage {
+  rstrImageId String @id
+  rstrName String
+  areaName String
+  imageUrl String
+  rstrId String
+  restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
+}
+
+model FoodImage {
+  foodImageId String @id
+  rstrName String
+  areaName String
+  imageUrl String
+  rstrId String
+  restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
+  menuId String
+  menu Menu @relation(fields: [menuId], references: [menuId])
+}

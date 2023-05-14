@@ -6,6 +6,11 @@ import { Body, Controller, Get } from '@nestjs/common';
 export class Food7beachController {
   constructor(private food7beachService: Food7beachService) {}
 
+  @Get('rstr')
+  async getRstr() {
+    return await this.food7beachService.getRstr();
+  }
+
   @Get('food-image')
   async getFoodImage() {
     return await this.food7beachService.getFoodImage();
