@@ -1,36 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
-import { FoodImageDto, FoodImageResponse } from './dto/foodImage.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import {
-  RestaurantDto,
-  RestaurantData,
-  RestaurantResponse,
-} from './dto/restaurant.dto';
+import { RestaurantDto, RestaurantResponse } from './dto/restaurant.dto';
+import { RequestData } from 'src/food7beach/utils/request';
 
 @Injectable()
 export class Food7beachService {
   constructor(
     private configService: ConfigService,
     private prismaService: PrismaService,
+    private request: RequestData,
   ) {}
   BASE_URL = `${this.configService.get<string>('FOOD7BEACH_BASE_URL')}`;
   API_KEY = `${this.configService.get<string>('FOOD7BEACH_API_KEY')}`;
 
   async getRstr() {
     try {
-      const response = await axios.get<RestaurantResponse>(
-        `${this.BASE_URL}/api/rstr`,
-        {
-          params: {
-            serviceKey: this.API_KEY,
-          },
-        },
-      );
-      console.log(response.data);
+      const response = await this.request.getData<RestaurantResponse>('/rstr', {
+        pageNo: 2,
+      });
 
-      const rstrData: RestaurantDto[] = response.data.body.map((rstr) => ({
+      const rstrData: RestaurantDto[] = response.body.map((rstr) => ({
         rstrId: rstr.RSTR_ID,
         rstrName: rstr.RSTR_NM,
         rstrRoadAddr: rstr.RSTR_RDNMADR,
@@ -55,24 +45,32 @@ export class Food7beachService {
     }
   }
 
-  async getFoodImage() {
-    console.log(this.BASE_URL);
-    console.log(this.BASE_URL);
+  async getMenu() {
     try {
-      const response = await axios.get<FoodImageResponse>(
-        `${this.BASE_URL}/api/food/img`,
-        {
-          params: {
-            serviceKey: this.API_KEY,
-          },
-        },
-      );
-
-      // db에 저장
-
-      return response;
     } catch (err) {
+      console.log(err);
       return err;
     }
   }
+
+  // async getFoodImage() {
+  //   console.log(this.BASE_URL);
+  //   console.log(this.BASE_URL);
+  //   try {
+  //     const response = await axios.get<FoodImageResponse>(
+  //       `${this.BASE_URL}/api/food/img`,
+  //       {
+  //         params: {
+  //           serviceKey: this.API_KEY,
+  //         },
+  //       },
+  //     );
+
+  //     // db에 저장
+
+  //     return response;
+  //   } catch (err) {
+  //     return err;
+  //   }
+  // }
 }

@@ -21,27 +21,26 @@ model Restaurant {
   bizName String? // 영업신고증 업태명
   bizLicenceName String // 영업인허가명
   rstrDescription String // 식당소개
-
-  // menus Menu[]
+  menus Menu[]
+  
   // menuDetails MenuDetail[]
   // restaurantImages RestaurantImage[]
   // foodImages FoodImage[]
 }
 
-// model Menu {
-//   menuId String @id 
-//   menuName String
-//   menuPrice Int
-//   isSpecial String // 지역특산메뉴여부 Y or N
-//   specialName String? // 지역특산메뉴명 string or null
-//   specialUrl String?
-//   areaName String
-//   rstrId String // 식당 id
-
-//   restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
-//   menuDetails MenuDetail[]
-//   foodImages FoodImage[]
-// }
+model Menu {
+  menuId String @id 
+  menuName String
+  menuPrice Int
+  isSpecial String // 지역특산메뉴여부 Y or N
+  specialName String? // 지역특산메뉴명 string or null
+  specialUrl String?
+  areaName String
+  rstrId Int // 식당 id
+  restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
+  // menuDetails MenuDetail[]
+  // foodImages FoodImage[]
+}
 
 // model MenuDetail {
 //   menuDetailId String @id
