@@ -11,7 +11,7 @@ export class RequestData {
   API_KEY = `${this.configService.get<string>('FOOD7BEACH_API_KEY')}`;
 
   // get 메소드
-  async getData<T>(url: string, params?: any): Promise<T> {
+  async get<T>(url: string, params?: any): Promise<T> {
     try {
       const { data } = await axios.get<T>(`${this.BASE_URL}${url}`, {
         params: {

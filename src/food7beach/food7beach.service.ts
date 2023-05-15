@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RestaurantDto, RestaurantResponse } from './dto/restaurant.dto';
 import { RequestData } from 'src/food7beach/utils/request';
+import { MenuDto, MenuResponse } from './dto/menu.dto';
 
 @Injectable()
 export class Food7beachService {
@@ -16,7 +17,7 @@ export class Food7beachService {
 
   async getRstr() {
     try {
-      const response = await this.request.getData<RestaurantResponse>('/rstr', {
+      const response = await this.request.get<RestaurantResponse>('/rstr', {
         pageNo: 2,
       });
 
@@ -47,6 +48,28 @@ export class Food7beachService {
 
   async getMenu() {
     try {
+      const response = await this.request.get<MenuResponse>('/menu/korean', {
+        pageNo: 1,
+      });
+
+      // const menuData: MenuDto[] = response.body.map((menu) => ({
+      //   menuId: menu.MENU_ID,
+      //   menuName: menu.MENU_NM,
+      //   menuPrice: menu.MENU_PRICE,
+      //   isMenuSpecial: menu.SPCLT_MENU_YN,
+      //   menuSpecialName: menu.SPCLT_MENU_NM,
+      //   menuSpecialUrl: menu.SPCLT_MENU_OGN_URL,
+      //   areaName: menu.AREA_NM,
+      //   rstrId: menu.RSTR_ID,
+      //   rstrName: menu.RSTR_NM,
+      // }));
+
+      // const success = await this.prismaService.menu.createMany({
+      //   data: menuData,
+      //   skipDuplicates: true,
+      // });
+
+      return response;
     } catch (err) {
       console.log(err);
       return err;
