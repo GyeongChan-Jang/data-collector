@@ -37,26 +37,34 @@ model Menu {
   areaName String
   rstrName String
   // Menu 테이블의 rstrId의 field는 Restaurant 테이블의 rstrId를 참조한다.
-  rstrId Int 
+  rstrId Int
   // restaurant Restaurant @relation(fields: [rstrId], references: [rstrId]) 
+
+  // 메뉴상세 api에서 받는 데이터 속성
+  menuDescription String?
+  menuCategoryL String? // 대분류 
+  menuCategoryS String? // 소분류
+  // menuId String
+  
   // menuDetails MenuDetail[]
   // foodImages FoodImage[]
 }
 
-model MenuDetail {
-  // menuDetailId String @id
-  menuDetailId Int @id @default(autoincrement())
-  menuName String
-  menuDescription String?
-  menuCategoryL String // 대분류 
-  menuCategoryS String? // 소분류
-  menuId String
-  rstrName String
-  areaName String
-  // menu Menu @relation(fields: [menuId], references: [menuId])
-  // rstrId String
-  // restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
-}
+// model MenuDetail {
+//   // menuDetailId String @id
+//   menuDetailId Int @id @default(autoincrement())
+//   menuName String
+//   menuDescription String?
+//   menuCategoryL String // 대분류 
+//   menuCategoryS String? // 소분류
+//   menuId String
+//   rstrName String
+//   areaName String
+//   // 상세메뉴 api 데이터 속성
+//   // menu Menu @relation(fields: [menuId], references: [menuId])
+//   // rstrId String
+//   // restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
+// }
 
 // model RestaurantImage {
 //   rstrImageId String @id

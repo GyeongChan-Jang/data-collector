@@ -15,45 +15,68 @@ export class Food7beachService {
   ) {}
   BASE_URL = `${this.configService.get<string>('FOOD7BEACH_BASE_URL')}`;
   API_KEY = `${this.configService.get<string>('FOOD7BEACH_API_KEY')}`;
+  
 
   async getRstr() {
+    const totalCount = 6194;
+    const numOfRows = 1000;
+    const totalPages = Math.ceil(totalCount / numOfRows);
+    const rstrData: RestaurantDto[] = [];
+  
+    for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
+      console.log('pageNo', pageNo)
+      try {
+        const response = await this.request.get<RestaurantResponse>('/rstr', {
+          pageNo,
+        });
+  
+        const pageData: RestaurantDto[] = response.body.map((rstr) => ({
+          rstrId: rstr.RSTR_ID,
+          rstrName: rstr.RSTR_NM,
+          rstrRoadAddr: rstr.RSTR_RDNMADR,
+          rstrLotNumberAddr: rstr.RSTR_LNNO_ADRES,
+          rstrLat: rstr.RSTR_LA,
+          rstrLng: rstr.RSTR_LO,
+          rstrPhone: rstr.RSTR_TELNO,
+          bizName: rstr.BSNS_STATM_BZCND_NM,
+          bizLicenceName: rstr.BSNS_LCNC_NM,
+          rstrDescription: rstr.RSTR_INTRCN_CONT,
+        }));
+  
+        rstrData.push(...pageData);
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    }
+  
     try {
-      const response = await this.request.get<RestaurantResponse>('/rstr', {
-        pageNo: 2,
-      });
-
-      const rstrData: RestaurantDto[] = response.body.map((rstr) => ({
-        rstrId: rstr.RSTR_ID,
-        rstrName: rstr.RSTR_NM,
-        rstrRoadAddr: rstr.RSTR_RDNMADR,
-        rstrLotNumberAddr: rstr.RSTR_LNNO_ADRES,
-        rstrLat: rstr.RSTR_LA,
-        rstrLng: rstr.RSTR_LO,
-        rstrPhone: rstr.RSTR_TELNO,
-        bizName: rstr.BSNS_STATM_BZCND_NM,
-        bizLicenceName: rstr.BSNS_LCNC_NM,
-        rstrDescription: rstr.RSTR_INTRCN_CONT,
-      }));
-
       const success = await this.prismaService.restaurant.createMany({
         data: rstrData,
         skipDuplicates: true,
-      })
-
+      });
+  
       return success;
     } catch (err) {
       console.log(err);
-      return err
+      return err;
     }
   }
 
   async getMenu() {
+    const totalCount = 63945;
+    const numOfRows = 1000;
+    const totalPages = Math.ceil(totalCount / numOfRows);
+    const menuData: MenuDto[] = [];
+
+    for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
+      console.log('pageNo', pageNo)
     try {
       const response = await this.request.get<MenuResponse>('/menu/korean', {
-        pageNo: 1,
+        pageNo,
       });
 
-      const menuData: MenuDto[] = response.body.map((menu) => ({
+      const pageData: MenuDto[] = response.body.map((menu) => ({
         menuId: menu.MENU_ID,
         menuName: menu.MENU_NM,
         menuPrice: menu.MENU_PRICE,
@@ -65,19 +88,30 @@ export class Food7beachService {
         rstrName: menu.RSTR_NM,
       }));
 
-      const success = await this.prismaService.menu.createMany({
-        data: menuData,
-        skipDuplicates: true,
-      });
+      menuData.push(...pageData);
 
-      return success;
     } catch (err) {
       console.log(err);
       return err;
     }
   }
+  try {
+    const success = await this.prismaService.menu.createMany({
+      data: menuData,
+      skipDuplicates: true,
+    });
+
+    return success;
+  }
+  catch (err) {
+    console.log(err);
+    return err;
+  }
+}
 
   // menuDetail은 메뉴 테이블에 추가할 것
+  // 식당데이터가 없으면 menu, menuDetail 정보도 저장이 안될듯
+  // id를 찾아서 저장될텐데 데이터가 없다면 에러가 날듯
   async getMenuDetail() {
     try {
       const response = await this.request.get<MenuDetailResponse>('menu-dscrn/korean', {
