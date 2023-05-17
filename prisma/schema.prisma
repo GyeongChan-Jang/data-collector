@@ -21,7 +21,7 @@ model Restaurant {
   bizName String? // 영업신고증 업태명
   bizLicenceName String // 영업인허가명
   rstrDescription String // 식당소개
-  // menus Menu[]
+  menus Menu[]
   // menuDetails MenuDetail[]
   // restaurantImages RestaurantImage[]
   // foodImages FoodImage[]
@@ -38,7 +38,7 @@ model Menu {
   rstrName String
   // Menu 테이블의 rstrId의 field는 Restaurant 테이블의 rstrId를 참조한다.
   rstrId Int
-  // restaurant Restaurant @relation(fields: [rstrId], references: [rstrId]) 
+  restaurant Restaurant @relation(fields: [rstrId], references: [rstrId]) 
 
   // 메뉴상세 api에서 받는 데이터 속성
   menuDescription String?

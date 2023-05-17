@@ -1,0 +1,2 @@
+-- AddForeignKey
+ALTER TABLE "Menu" ADD CONSTRAINT "Menu_rstrId_fkey" FOREIGN KEY ("rstrId") REFERENCES "Restaurant"("rstrId") ON DELETE RESTRICT ON UPDATE CASCADE;
