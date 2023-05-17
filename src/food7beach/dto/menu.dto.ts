@@ -11,10 +11,10 @@ export interface MenuResponse {
 export class MenuDto {
   menuId: number;
   menuName: string;
-  menuPrice: string;
-  isMenuSpecial: string;
-  menuSpecialName: string | null;
-  menuSpecialUrl: string | null; // 지역특산메뉴출처 url
+  menuPrice: number;
+  isSpecial: string;
+  specialName: string | null;
+  specialUrl: string | null; // 지역특산메뉴출처 url
   areaName: string;
   rstrId: number;
   rstrName: string;
