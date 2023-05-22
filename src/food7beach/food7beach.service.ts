@@ -184,8 +184,8 @@ export class Food7beachService {
     }
 
     // menu table에 menuDetailData를 추가
-    menuDetailData.forEach(async (detail) => {
-      console.log(detail);
+    // for...of
+    for (const detail of menuDetailData) {
       try {
         const success = await this.prismaService.menu.update({
           where: {
@@ -202,6 +202,25 @@ export class Food7beachService {
         console.log(err);
         return err;
       }
-    });
+    }
+    // menuDetailData.forEach(async (detail) => {
+    //   console.log(detail);
+    //   try {
+    //     const success = await this.prismaService.menu.update({
+    //       where: {
+    //         menuId: detail.menuId,
+    //       },
+    //       data: {
+    //         menuDescription: detail.menuDescription,
+    //         menuCategoryL: detail.menuCategoryL,
+    //         menuCategoryS: detail.menuCategoryS,
+    //       },
+    //     });
+    //     console.log(success);
+    //   } catch (err) {
+    //     console.log(err);
+    //     return err;
+    //   }
+    // });
   }
 }
