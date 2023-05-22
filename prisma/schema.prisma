@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,77 +8,31 @@ datasource db {
 }
 
 model Restaurant {
-  rstrId Int @id
-  rstrName String
-  rstrRoadAddr String // 도로명주소
-  rstrLotNumberAddr String // 지번주소
-  rstrLat String // 위도
-  rstrLng String // 경도
-  rstrPhone String?
-  bizName String? // 영업신고증 업태명
-  bizLicenceName String // 영업인허가명
-  rstrDescription String // 식당소개
-  menus Menu[]
-  // menuDetails MenuDetail[]
-  // restaurantImages RestaurantImage[]
-  // foodImages FoodImage[]
+  rstrName          String
+  rstrRoadAddr      String
+  rstrLotNumberAddr String
+  rstrLat           String
+  rstrLng           String
+  rstrPhone         String?
+  bizName           String?
+  rstrDescription   String
+  bizLicenceName    String
+  rstrId            Int     @id
+  menus             Menu[]
 }
 
 model Menu {
-  menuId Int @id 
-  menuName String
-  menuPrice Int
-  isSpecial String // 지역특산메뉴여부 Y or N
-  specialName String? // 지역특산메뉴명 string or null
-  specialUrl String?
-  areaName String
-  rstrName String
-  // Menu 테이블의 rstrId의 field는 Restaurant 테이블의 rstrId를 참조한다.
-  rstrId Int
-  restaurant Restaurant @relation(fields: [rstrId], references: [rstrId]) 
-
-  // 메뉴상세 api에서 받는 데이터 속성
+  menuName        String
+  menuPrice       Int
+  isSpecial       String
+  specialName     String?
+  specialUrl      String?
+  areaName        String
+  menuId          Int        @id
+  rstrName        String
+  rstrId          Int
+  menuCategoryL   String?
+  menuCategoryS   String?
   menuDescription String?
-  menuCategoryL String? // 대분류 
-  menuCategoryS String? // 소분류
-  // menuId String
-  
-  // menuDetails MenuDetail[]
-  // foodImages FoodImage[]
+  restaurant      Restaurant @relation(fields: [rstrId], references: [rstrId])
 }
-
-// model MenuDetail {
-//   // menuDetailId String @id
-//   menuDetailId Int @id @default(autoincrement())
-//   menuName String
-//   menuDescription String?
-//   menuCategoryL String // 대분류 
-//   menuCategoryS String? // 소분류
-//   menuId String
-//   rstrName String
-//   areaName String
-//   // 상세메뉴 api 데이터 속성
-//   // menu Menu @relation(fields: [menuId], references: [menuId])
-//   // rstrId String
-//   // restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
-// }
-
-// model RestaurantImage {
-//   rstrImageId String @id
-//   rstrName String
-//   areaName String
-//   imageUrl String
-//   rstrId String
-//   restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
-// }
-
-// model FoodImage {
-//   foodImageId String @id
-//   rstrName String
-//   areaName String
-//   imageUrl String
-//   rstrId String
-//   restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
-//   menuId String
-//   menu Menu @relation(fields: [menuId], references: [menuId])
-// }

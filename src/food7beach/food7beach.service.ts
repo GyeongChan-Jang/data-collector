@@ -21,36 +21,46 @@ export class Food7beachService {
   API_KEY = `${this.configService.get<string>('FOOD7BEACH_API_KEY')}`;
 
   async getRstr() {
-    const totalCount = 6194;
-    const numOfRows = 1000;
-    const totalPages = Math.ceil(totalCount / numOfRows);
     const rstrData: RestaurantDto[] = [];
+    // api 요청 후 totalCount, numOfRows, totalPages 구하기
+    try {
+      const response = await this.request.get<RestaurantResponse>('/rstr', {
+        numOfRows: 1,
+      });
 
-    for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
-      console.log('pageNo', pageNo);
-      try {
-        const response = await this.request.get<RestaurantResponse>('/rstr', {
-          pageNo,
-        });
+      const totalCount = response.header.totalCount;
+      const numOfRows = response.header.numOfRows;
+      const totalPages = Math.ceil(totalCount / numOfRows);
 
-        const pageData: RestaurantDto[] = response.body.map((rstr) => ({
-          rstrId: rstr.RSTR_ID,
-          rstrName: rstr.RSTR_NM,
-          rstrRoadAddr: rstr.RSTR_RDNMADR,
-          rstrLotNumberAddr: rstr.RSTR_LNNO_ADRES,
-          rstrLat: rstr.RSTR_LA,
-          rstrLng: rstr.RSTR_LO,
-          rstrPhone: rstr.RSTR_TELNO,
-          bizName: rstr.BSNS_STATM_BZCND_NM,
-          bizLicenceName: rstr.BSNS_LCNC_NM,
-          rstrDescription: rstr.RSTR_INTRCN_CONT,
-        }));
+      for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
+        console.log('pageNo', pageNo);
+        try {
+          const response = await this.request.get<RestaurantResponse>('/rstr', {
+            pageNo,
+          });
 
-        rstrData.push(...pageData);
-      } catch (err) {
-        console.log(err);
-        return err;
+          const pageData: RestaurantDto[] = response.body.map((rstr) => ({
+            rstrId: rstr.RSTR_ID,
+            rstrName: rstr.RSTR_NM,
+            rstrRoadAddr: rstr.RSTR_RDNMADR,
+            rstrLotNumberAddr: rstr.RSTR_LNNO_ADRES,
+            rstrLat: rstr.RSTR_LA,
+            rstrLng: rstr.RSTR_LO,
+            rstrPhone: rstr.RSTR_TELNO,
+            bizName: rstr.BSNS_STATM_BZCND_NM,
+            bizLicenceName: rstr.BSNS_LCNC_NM,
+            rstrDescription: rstr.RSTR_INTRCN_CONT,
+          }));
+
+          rstrData.push(...pageData);
+        } catch (err) {
+          console.log(err);
+          return err;
+        }
       }
+    } catch (err) {
+      console.log(err);
+      return err;
     }
 
     try {
@@ -67,36 +77,51 @@ export class Food7beachService {
   }
 
   async getMenu() {
-    const totalCount = 63945;
-    const numOfRows = 1000;
-    const totalPages = Math.ceil(totalCount / numOfRows);
     const menuData: MenuDto[] = [];
 
-    for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
-      console.log('pageNo', pageNo);
-      try {
-        const response = await this.request.get<MenuResponse>('/menu/korean', {
-          pageNo,
-        });
+    // api 요청 후 totalCount, numOfRows, totalPages 구하기
+    try {
+      const response = await this.request.get<MenuResponse>('/menu/korean', {
+        numOfRows: 1,
+      });
 
-        const pageData: MenuDto[] = response.body.map((menu) => ({
-          menuId: menu.MENU_ID,
-          menuName: menu.MENU_NM,
-          menuPrice: menu.MENU_PRICE,
-          isSpecial: menu.SPCLT_MENU_YN,
-          specialName: menu.SPCLT_MENU_NM,
-          specialUrl: menu.SPCLT_MENU_OGN_URL,
-          areaName: menu.AREA_NM,
-          rstrId: menu.RSTR_ID,
-          rstrName: menu.RSTR_NM,
-        }));
+      const totalCount = response.header.totalCount;
+      const numOfRows = response.header.numOfRows;
+      const totalPages = Math.ceil(totalCount / numOfRows);
 
-        menuData.push(...pageData);
-      } catch (err) {
-        console.log(err);
-        return err;
+      for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
+        console.log('pageNo', pageNo);
+        try {
+          const response = await this.request.get<MenuResponse>(
+            '/menu/korean',
+            {
+              pageNo,
+            },
+          );
+
+          const pageData: MenuDto[] = response.body.map((menu) => ({
+            menuId: menu.MENU_ID,
+            menuName: menu.MENU_NM,
+            menuPrice: menu.MENU_PRICE,
+            isSpecial: menu.SPCLT_MENU_YN,
+            specialName: menu.SPCLT_MENU_NM,
+            specialUrl: menu.SPCLT_MENU_OGN_URL,
+            areaName: menu.AREA_NM,
+            rstrId: menu.RSTR_ID,
+            rstrName: menu.RSTR_NM,
+          }));
+
+          menuData.push(...pageData);
+        } catch (err) {
+          console.log(err);
+          return err;
+        }
       }
+    } catch (err) {
+      console.log(err);
+      return err;
     }
+
     try {
       const success = await this.prismaService.menu.createMany({
         data: menuData,
@@ -114,56 +139,69 @@ export class Food7beachService {
   // 식당데이터가 없으면 menu, menuDetail 정보도 저장이 안될듯
   // id를 찾아서 저장될텐데 데이터가 없다면 에러가 날듯
   async getMenuDetail() {
-    const totalCount = 63945;
-    const numOfRows = 1000;
-    const totalPages = Math.ceil(totalCount / numOfRows);
     const menuDetailData: MenuDetailDto[] = [];
+    try {
+      const response = await this.request.get<MenuDetailResponse>(
+        '/menu-dscrn/korean',
+        {
+          numOfRows: 1,
+        },
+      );
 
-    for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
-      console.log('pageNo', pageNo)
-      try {
-        const response = await this.request.get<MenuDetailResponse>(
-          'menu-dscrn/korean',
-          {
-            pageNo,
-          },
-        );
+      const totalCount = response.header.totalCount;
+      const numOfRows = response.header.numOfRows;
+      const totalPages = Math.ceil(totalCount / numOfRows);
 
-        const pageData: MenuDetailDto[] = response.body.map((detail) => ({
-          menuId: detail.MENU_ID,
-          menuName: detail.MENU_NM,
-          menuDescription: detail.MENU_DSCRN,
-          menuCategoryL: detail.MENU_CTGRY_LCLAS_NM,
-          menuCategoryS: detail.MENU_CTGRY_SCLAS_NM,
-          rstrId: detail.RSTR_ID,
-          rstrName: detail.RSTR_NM,
-          areaName: detail.AREA_NM,
-        }));
+      for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
+        console.log('pageNo', pageNo);
+        try {
+          const response = await this.request.get<MenuDetailResponse>(
+            '/menu-dscrn/korean',
+            {
+              pageNo,
+            },
+          );
 
-        menuDetailData.push(...pageData);
-      } catch (err) {
-        console.log(err);
+          const pageData: MenuDetailDto[] = response.body.map((detail) => ({
+            menuId: detail.MENU_ID,
+            menuName: detail.MENU_NM,
+            menuDescription: detail.MENU_DSCRN,
+            menuCategoryL: detail.MENU_CTGRY_LCLAS_NM,
+            menuCategoryS: detail.MENU_CTGRY_SCLAS_NM,
+            rstrId: detail.RSTR_ID,
+            rstrName: detail.RSTR_NM,
+            areaName: detail.AREA_NM,
+          }));
+
+          menuDetailData.push(...pageData);
+        } catch (err) {
+          console.log(err);
+        }
       }
+    } catch (err) {
+      console.log(err);
+      return err;
     }
 
     // menu table에 menuDetailData를 추가
-    // menuDetailData.forEach(async (detail) => {
-    //   console.log(detail)
-    //   try {
-    //     const success = await this.prismaService.menu.update({
-    //       where: {
-    //         menuId: detail.menuId,
-    //       },
-    //       data: {
-    //         menuDescription: detail.menuDescription,
-    //         menuCategoryL: detail.menuCategoryL,
-    //         menuCategoryS: detail.menuCategoryS,
-    //       },
-    //     });
-    //     console.log(success);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // });
+    menuDetailData.forEach(async (detail) => {
+      console.log(detail);
+      try {
+        const success = await this.prismaService.menu.update({
+          where: {
+            menuId: detail.menuId,
+          },
+          data: {
+            menuDescription: detail.menuDescription,
+            menuCategoryL: detail.menuCategoryL,
+            menuCategoryS: detail.menuCategoryS,
+          },
+        });
+        console.log(success);
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    });
   }
 }
