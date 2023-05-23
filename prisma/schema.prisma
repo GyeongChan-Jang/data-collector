@@ -8,8 +8,10 @@ datasource db {
 }
 
 model Restaurant {
+  rstrId            Int      @id
   rstrName          String
   rstrRoadAddr      String
+  rstrImgUrl        String?
   rstrLotNumberAddr String
   rstrLat           String
   rstrLng           String
@@ -17,22 +19,23 @@ model Restaurant {
   bizName           String?
   rstrDescription   String
   bizLicenceName    String
-  rstrId            Int     @id
+  updatedAt         DateTime @updatedAt
   menus             Menu[]
 }
 
 model Menu {
+  menuId          Int        @id
   menuName        String
   menuPrice       Int
   isSpecial       String
   specialName     String?
   specialUrl      String?
   areaName        String
-  menuId          Int        @id
   rstrName        String
   rstrId          Int
   menuCategoryL   String?
   menuCategoryS   String?
   menuDescription String?
+  updatedAt       DateTime   @updatedAt
   restaurant      Restaurant @relation(fields: [rstrId], references: [rstrId])
 }

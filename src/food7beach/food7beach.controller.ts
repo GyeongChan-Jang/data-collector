@@ -23,6 +23,11 @@ export class Food7beachController {
     return await this.food7beachService.getMenuDetail();
   }
 
+  @Get('rstr/img')
+  async getRstrImage() {
+    return await this.food7beachService.getRstrImage();
+  }
+
   // @Get('food-image')
   // async getFoodImage() {
   //   return await this.food7beachService.getFoodImage();
