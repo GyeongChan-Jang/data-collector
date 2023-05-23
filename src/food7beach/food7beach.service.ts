@@ -10,6 +10,7 @@ import {
   MenuDetailData,
 } from './dto/menuDetail.dto';
 import { RestaurantImageDto, RestaurantImageResponse } from './dto/restaurantImage.dto';
+import { FoodImageData, FoodImageDto, FoodImageResponse } from './dto/foodImage.dto';
 
 @Injectable()
 export class Food7beachService {
@@ -209,7 +210,7 @@ export class Food7beachService {
     }
   }
 
-  // 식당 이미지 데이터 가져와 DB 저장
+  // 식당 이미지 데이터 가져와 Resaurant 테이블에 저장
   async getRstrImage() {
     const rstrImageData: RestaurantImageDto[] = [];
     try {
@@ -270,5 +271,73 @@ export class Food7beachService {
         return err;
       }
     }
+  }
+
+  // 메뉴 이미지 데이터를 가져와 Menu 테이블에 저장
+  async getFoodImage() {
+
+    const foodImageData: FoodImageDto[] = [];
+    try {
+      const response = await this.request.get<FoodImageResponse>(
+        '/food/img',
+        {
+          numOfRows: 1,
+        },
+      );
+
+      const totalCount = response.header.totalCount;
+      const numOfRows = response.header.numOfRows;
+      const totalPages = Math.ceil(totalCount / numOfRows);
+
+      for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
+        console.log('pageNo', pageNo);
+        try {
+          const response = await this.request.get<FoodImageResponse>(
+            '/food/img',
+            {
+              pageNo,
+            },
+          );
+
+          const pageData: FoodImageDto[] = response.body.map((image) => ({
+            rstrId: image.RSTR_ID,
+            rstrName: image.RSTR_NM,
+            areaName: image.AREA_NM,
+            menuId: image.MENU_ID,
+            foodImgUrl: image.FOOD_IMG_URL
+          }));
+
+          foodImageData.push(...pageData);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      return err
+    }
+
+    // Menu table에 menuImageData를 추가
+    // for...of
+
+    console.log(foodImageData.length)
+    
+    // for (const image of foodImageData) {
+    //   try {
+    //     const success = await this.prismaService.menu.update({
+    //       where: {
+    //         menuId: image.menuId,
+    //       },
+    //       data: {
+    //         foodImgUrl: image.foodImgUrl,
+    //       },
+    //     });
+    //     console.log(success, '메뉴 이미지 업데이트 완료')
+    //   } catch (err) {
+    //     console.log(err);
+    //     return err;
+    //   }
+    // }
+    
   }
 }

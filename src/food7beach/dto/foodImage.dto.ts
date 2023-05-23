@@ -1,5 +1,3 @@
-import { IsNumber, IsString } from 'class-validator';
-
 export interface FoodImageResponse {
   header: {
     resultCode: string;
@@ -8,18 +6,21 @@ export interface FoodImageResponse {
     pageNo: number;
     totalCount: number;
   };
-  body: FoodImageDto[];
+  body: FoodImageData[];
 }
 
 export class FoodImageDto {
-  @IsNumber()
+  rstrId: number;
+  rstrName: string;
+  areaName: string;
+  menuId: number;
+  foodImgUrl: string;
+}
+
+export interface FoodImageData {
   RSTR_ID: number;
-  @IsString()
   RSTR_NM: string;
-  @IsString()
   AREA_NM: string;
-  @IsNumber()
-  MENU_ID: number;
-  @IsString()
+  MENU_ID: number; 
   FOOD_IMG_URL: string;
 }

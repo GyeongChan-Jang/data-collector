@@ -26,14 +26,15 @@ model Restaurant {
 model Menu {
   menuId          Int        @id
   menuName        String
+  foodImgUrl      String?
   menuPrice       Int
   isSpecial       String
   specialName     String?
   specialUrl      String?
   areaName        String
   rstrName        String
-  rstrId          Int
   menuCategoryL   String?
+  rstrId          Int
   menuCategoryS   String?
   menuDescription String?
   updatedAt       DateTime   @updatedAt

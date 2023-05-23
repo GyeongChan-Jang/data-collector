@@ -28,8 +28,8 @@ export class Food7beachController {
     return await this.food7beachService.getRstrImage();
   }
 
-  // @Get('food-image')
-  // async getFoodImage() {
-  //   return await this.food7beachService.getFoodImage();
-  // }
+  @Get('food/img')
+  async getFoodImage() {
+    return await this.food7beachService.getFoodImage();
+  }
 }
