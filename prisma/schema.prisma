@@ -40,3 +40,33 @@ model Menu {
   updatedAt       DateTime   @updatedAt
   restaurant      Restaurant @relation(fields: [rstrId], references: [rstrId])
 }
+
+// model RestaurantOperating {
+//             rstrId     Int      @id
+//             rstrName  String
+//             areaName  String
+//             perpendicularSeat  Int?
+//             seatCount Int?
+//             isParking String
+//             isWifi String
+//             isPlayroom String
+//             isPet String
+//             isForeignMenu String
+//             // 화장실 정보 내용 제외
+//             "RESTDY_INFO_CN": null,
+//             "BSNS_TM_CN": null,
+//             "HMDLV_SALE_YN": "N",
+//             "DSBR_CVNTL_YN": "N",
+//             "DELV_SRVIC_YN": "N",
+//             "RSRV_MTHD_NM": null,
+//             "ONLINE_RSRV_INFO_CN": null,
+//             "HMPG_URL": null,
+//             "CRCMF_LDMARK_NM": null,
+//             "CRCMF_LDMARK_LA": null,
+//             "CRCMF_LDMARK_LO": null,
+//             "CRCMF_LDMARK_DIST": null,
+//             "KIOSK_YN": "N",
+//             "MB_PMAMT_YN": "N",
+//             "SMORDER_YN": "N",
+//             "REPRSNT_MENU_NM": null
+// }
