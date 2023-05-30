@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigService, getConfigToken } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RestaurantDto, RestaurantResponse } from './dto/restaurant.dto';
 import { RequestData } from 'src/food7beach/utils/request';
@@ -18,6 +18,10 @@ import {
   FoodImageDto,
   FoodImageResponse,
 } from './dto/foodImage.dto';
+import {
+  RestaurantOprtDto,
+  RestaurantOprtResponse,
+} from './dto/restaurantOprtInfo';
 
 @Injectable()
 export class Food7beachService {
@@ -322,27 +326,87 @@ export class Food7beachService {
 
     // Menu table에 menuImageData를 추가
     // for...of
-
-    console.log(foodImageData.length);
-
-    // for (const image of foodImageData) {
-    //   try {
-    //     const success = await this.prismaService.menu.update({
-    //       where: {
-    //         menuId: image.menuId,
-    //       },
-    //       data: {
-    //         foodImgUrl: image.foodImgUrl,
-    //       },
-    //     });
-    //     console.log(success, '메뉴 이미지 업데이트 완료')
-    //   } catch (err) {
-    //     console.log(err);
-    //     return err;
-    //   }
-    // }
+    for (const image of foodImageData) {
+      console.log(image);
+      try {
+        const success = await this.prismaService.menu.update({
+          where: {
+            menuId: image.menuId,
+          },
+          data: {
+            foodImgUrl: image.foodImgUrl,
+          },
+        });
+        console.log(success, '메뉴 이미지 업데이트 완료');
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    }
   }
 
-  // 식당 운영정보 데이터를 가져와 Restaurant 테이블에 저장
-  async getRstrOperatingInfo() {}
+  // 식당 운영정보 데이터를 가져와 RestaurantOperating 테이블에 저장
+  async getRstrOperatingInfo() {
+    const rstrOperatingInfoData: RestaurantOprtDto[] = [];
+
+    try {
+      const response = await this.request.get<RestaurantOprtResponse>(
+        '/rstr/oprt',
+        {
+          numOfRows: 1,
+        },
+      );
+
+      const totalCount = response.header.totalCount;
+      const numOfRows = response.header.numOfRows;
+      const totalPages = Math.ceil(totalCount / numOfRows);
+
+      for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
+        console.log('pageNo', pageNo);
+        try {
+          const response = await this.request.get<RestaurantOprtResponse>(
+            '/rstr/oprt',
+            {
+              pageNo,
+            },
+          );
+
+          const pageData: RestaurantOprtDto[] = response.body.map((oprt) => ({
+            rstrId: oprt.RSTR_ID,
+            rstrName: oprt.RSTR_NM,
+            areaName: oprt.AREA_NM,
+            perpendicularSeatNum: oprt.PRDL_SEAT_CNT,
+            seatCount: oprt.SEAT_CNT,
+            isParking: oprt.PRKG_POS_YN,
+            isWifi: oprt.WIFI_OFR_YN,
+            isPlayroom: oprt.DCRN_YN,
+            isPet: oprt.PET_ENTRN_POSBL_YN,
+            isForeignMenu: oprt.FGGG_MENU_OFR_YN,
+            restDay: oprt.RESTDY_INFO_CN,
+            businessHour: oprt.BSNS_TM_CN,
+            isHomedelivery: oprt.HMDLV_SALE_YN,
+            isDisabledConvenience: oprt.DSBR_CVNTL_YN,
+            isDelervService: oprt.DELV_SRVIC_YN,
+            reservationMethod: oprt.RSRV_MTHD_NM,
+            homepageUrl: oprt.HMPG_URL,
+            nearLandmarkName: oprt.CRCMF_LDMARK_NM,
+            nearLandmarkLat: oprt.CRCMF_LDMARK_LA,
+            nearLandmarkLng: oprt.CRCMF_LDMARK_LO,
+            nearLandmarkDistance: oprt.CRCMF_LDMARK_DIST,
+            isKiosk: oprt.KIOSK_YN,
+            isMobilePay: oprt.MB_PMAMT_YN,
+            isSmartOrder: oprt.SMORDER_YN,
+            representMenuName: oprt.REPRSNT_MENU_NM,
+          }));
+
+          rstrOperatingInfoData.push(...pageData);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
 }

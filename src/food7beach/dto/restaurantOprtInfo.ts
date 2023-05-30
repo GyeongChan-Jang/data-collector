@@ -12,22 +12,40 @@ export interface RestaurantOprtResponse {
 export class RestaurantOprtDto {
   rstrId: number;
   rstrName: string;
-  rstrRoadAddr: string;
-  rstrLotNumberAddr: string;
-  rstrLat: string;
-  rstrLng: string;
-  rstrPhone: string | null;
-  bizName: string | null;
-  bizLicenceName: string;
-  rstrDescription: string;
+  areaName: string;
+  perpendicularSeat?: number;
+  seatCount?: number;
+  isParking: string;
+  isWifi: string;
+  isPlayroom: string;
+  isPet: string;
+  isForeignMenu: string;
+  // 화장실 정보 내용 제외
+  restDay?: string; // String? 전부 string or null
+  // 영업시간
+  businessHour?: string;
+  isHomedelivery: string;
+  isDisabledConvenience: string;
+  isDelervService: string;
+  reservationMethod?: string;
+  // 온라인 예약 정보 내용 제외 -> 데이터가 거의 null
+  homepageUrl?: string;
+  nearLandmarkName?: string;
+  nearLandmarkLat?: string;
+  nearLandmarkLng?: string;
+  nearLandmarkDistance?: string;
+  isKiosk: string;
+  isMobilePay: string;
+  isSmartOrder: string;
+  representMenuName?: string;
 }
 
 export interface RestaurantOprtData {
   RSTR_ID: number;
   RSTR_NM: string;
   AREA_NM: string;
-  PRDL_SEAT_CNT?: string;
-  SEAT_CNT?: string;
+  PRDL_SEAT_CNT?: number;
+  SEAT_CNT?: number;
   PRKG_POS_YN: string;
   WIFI_OFR_YN: string;
   DCRN_YN: string;
