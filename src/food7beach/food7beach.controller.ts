@@ -32,4 +32,9 @@ export class Food7beachController {
   async getFoodImage() {
     return await this.food7beachService.getFoodImage();
   }
+
+  @Get('rstr/port')
+  async getRstrOperationgInfo() {
+    return await this.food7beachService.getRstrOperatingInfo();
+  }
 }

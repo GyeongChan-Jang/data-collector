@@ -41,32 +41,33 @@ model Menu {
   restaurant      Restaurant @relation(fields: [rstrId], references: [rstrId])
 }
 
-// model RestaurantOperating {
-//             rstrId     Int      @id
-//             rstrName  String
-//             areaName  String
-//             perpendicularSeat  Int?
-//             seatCount Int?
-//             isParking String
-//             isWifi String
-//             isPlayroom String
-//             isPet String
-//             isForeignMenu String
-//             // 화장실 정보 내용 제외
-//             "RESTDY_INFO_CN": null,
-//             "BSNS_TM_CN": null,
-//             "HMDLV_SALE_YN": "N",
-//             "DSBR_CVNTL_YN": "N",
-//             "DELV_SRVIC_YN": "N",
-//             "RSRV_MTHD_NM": null,
-//             "ONLINE_RSRV_INFO_CN": null,
-//             "HMPG_URL": null,
-//             "CRCMF_LDMARK_NM": null,
-//             "CRCMF_LDMARK_LA": null,
-//             "CRCMF_LDMARK_LO": null,
-//             "CRCMF_LDMARK_DIST": null,
-//             "KIOSK_YN": "N",
-//             "MB_PMAMT_YN": "N",
-//             "SMORDER_YN": "N",
-//             "REPRSNT_MENU_NM": null
-// }
+model RestaurantOperating {
+            rstrId     Int      @id
+            rstrName  String
+            areaName  String
+            perpendicularSeat  Int?
+            seatCount Int?
+            isParking String
+            isWifi String
+            isPlayroom String
+            isPet String
+            isForeignMenu String
+            // 화장실 정보 내용 제외
+            restDay String? // String? 전부 string or null
+            // 영업시간
+            businessHour String? 
+            isHomedelivery String
+            isDisabledConvenience String
+            isDelervService String
+            reservationMethod String?
+            // 온라인 예약 정보 내용 제외 -> 데이터가 거의 null
+            homepageUrl String? 
+            nearLandmarkName String?
+            nearLandmarkLat String?
+            nearLandmarkLng String?
+            nearLandmarkDistance String?
+            isKiosk String
+            isMobilePay String
+            isSmartOrder String
+            representMenuName String?
+}

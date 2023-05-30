@@ -9,8 +9,15 @@ import {
   MenuDetailResponse,
   MenuDetailData,
 } from './dto/menuDetail.dto';
-import { RestaurantImageDto, RestaurantImageResponse } from './dto/restaurantImage.dto';
-import { FoodImageData, FoodImageDto, FoodImageResponse } from './dto/foodImage.dto';
+import {
+  RestaurantImageDto,
+  RestaurantImageResponse,
+} from './dto/restaurantImage.dto';
+import {
+  FoodImageData,
+  FoodImageDto,
+  FoodImageResponse,
+} from './dto/foodImage.dto';
 
 @Injectable()
 export class Food7beachService {
@@ -202,7 +209,7 @@ export class Food7beachService {
             menuCategoryS: detail.menuCategoryS,
           },
         });
-        console.log(success, '메뉴 상세 업데이트 완료')
+        console.log(success, '메뉴 상세 업데이트 완료');
       } catch (err) {
         console.log(err);
         return err;
@@ -239,7 +246,7 @@ export class Food7beachService {
             rstrId: image.RSTR_ID,
             rstrName: image.RSTR_NM,
             areaName: image.AREA_NM,
-            rstrImgUrl: image.RSTR_IMG_URL
+            rstrImgUrl: image.RSTR_IMG_URL,
           }));
 
           rstrImageData.push(...pageData);
@@ -248,13 +255,13 @@ export class Food7beachService {
         }
       }
     } catch (err) {
-      console.log(err)
-      return err
+      console.log(err);
+      return err;
     }
 
     // Restaurant table에 rstrImageData를 추가
     // for...of
-    console.log(rstrImageData)
+    console.log(rstrImageData);
     for (const image of rstrImageData) {
       try {
         const success = await this.prismaService.restaurant.update({
@@ -265,7 +272,7 @@ export class Food7beachService {
             rstrImgUrl: image.rstrImgUrl,
           },
         });
-        console.log(success, '식당 이미지 업데이트 완료')
+        console.log(success, '식당 이미지 업데이트 완료');
       } catch (err) {
         console.log(err);
         return err;
@@ -275,15 +282,11 @@ export class Food7beachService {
 
   // 메뉴 이미지 데이터를 가져와 Menu 테이블에 저장
   async getFoodImage() {
-
     const foodImageData: FoodImageDto[] = [];
     try {
-      const response = await this.request.get<FoodImageResponse>(
-        '/food/img',
-        {
-          numOfRows: 1,
-        },
-      );
+      const response = await this.request.get<FoodImageResponse>('/food/img', {
+        numOfRows: 1,
+      });
 
       const totalCount = response.header.totalCount;
       const numOfRows = response.header.numOfRows;
@@ -304,7 +307,7 @@ export class Food7beachService {
             rstrName: image.RSTR_NM,
             areaName: image.AREA_NM,
             menuId: image.MENU_ID,
-            foodImgUrl: image.FOOD_IMG_URL
+            foodImgUrl: image.FOOD_IMG_URL,
           }));
 
           foodImageData.push(...pageData);
@@ -313,15 +316,15 @@ export class Food7beachService {
         }
       }
     } catch (err) {
-      console.log(err)
-      return err
+      console.log(err);
+      return err;
     }
 
     // Menu table에 menuImageData를 추가
     // for...of
 
-    console.log(foodImageData.length)
-    
+    console.log(foodImageData.length);
+
     // for (const image of foodImageData) {
     //   try {
     //     const success = await this.prismaService.menu.update({
@@ -338,6 +341,8 @@ export class Food7beachService {
     //     return err;
     //   }
     // }
-    
   }
+
+  // 식당 운영정보 데이터를 가져와 Restaurant 테이블에 저장
+  async getRstrOperatingInfo() {}
 }
