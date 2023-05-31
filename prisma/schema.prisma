@@ -22,6 +22,7 @@ model Restaurant {
   updatedAt         DateTime @updatedAt
   menus             Menu[]
   restaurantOperating RestaurantOperating?
+  restaurantQuality RestaurantQuality?
 }
 
 model Menu {
@@ -46,31 +47,47 @@ model RestaurantOperating {
   rstrId     Int      @id
   rstrName  String
   areaName  String
-  perpendicularSeat  Int?
+  perpendicularSeat  Int? // 입석좌석수
   seatCount Int?
   isParking String
-  isWifi String
-  isPlayroom String
-  isPet String
-  isForeignMenu String
+  isWifi String // 와이파이 유무
+  isPlayroom String // 놀이방 유무
+  isPet String // 애완동물 입장 가능 여부
+  isForeignMenu String // 외국어 메뉴 유무
   // 화장실 정보 내용 제외
   restDay String? // String? 전부 string or null
   // 영업시간
-  businessHour String? 
-  isHomedelivery String
-  isDisabledConvenience String
-  isDelervService String
-  reservationMethod String?
+  businessHour String? // 운영시간
+  isHomedelivery String // 배달 가능 여부
+  isDisabledConvenience String // 장애인 편의시설 유무
+  isDelervService String // 배달 서비스 여부
+  reservationMethod String? // 예약 방식
   // 온라인 예약 정보 내용 제외 -> 데이터가 거의 null
   homepageUrl String? 
-  nearLandmarkName String?
+  nearLandmarkName String? // 인근랜드마크명
   nearLandmarkLat String?
   nearLandmarkLng String?
   nearLandmarkDistance String?
-  isKiosk String
-  isMobilePay String
-  isSmartOrder String
-  representMenuName String?
+  isKiosk String // 키오스크 유무
+  isMobilePay String // 모바일 결제 유무
+  isSmartOrder String // 스마트오더 유무
+  representMenuName String? // 대표메뉴명
   // Restaurant 테이블과 1 : 1 관계
   restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
+}
+
+model RestaurantQuality {
+  rstrId     Int      @id
+  rstrName String
+  areaName String
+  awardInfo String? // string or null
+  rtiIndex String?
+  isOnline String? // 온라인진행화여부 Y or N
+  acceptStatusIndex String? // 수용태세지수
+  rating String? // 인기도
+  tradAdvisorRating String? // 트립어드바이저 평점
+  cTripRating String? // C트립 평점
+  naverRating String? // 네이버 평점
+  restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
+
 }

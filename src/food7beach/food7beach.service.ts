@@ -22,6 +22,10 @@ import {
   RestaurantOprtDto,
   RestaurantOprtResponse,
 } from './dto/restaurantOprtInfo';
+import {
+  RestaurantQualityDto,
+  RestaurantQualityResponse,
+} from './dto/restaurantQuality.dto';
 
 @Injectable()
 export class Food7beachService {
@@ -418,6 +422,72 @@ export class Food7beachService {
       return success;
     } catch (err) {
       console.log('식당 운영정보 DB 생성 에러', err);
+      return err;
+    }
+  }
+
+  // 식당 품질정보 데이터를 가져와 RestaurantQuality 테이블에 저장
+  async getRstrQualityInfo() {
+    const rstrQualityInfoData: RestaurantQualityDto[] = [];
+
+    try {
+      const response = await this.request.get<RestaurantQualityResponse>(
+        '/rstr/qlt',
+        {
+          numOfRows: 1,
+        },
+      );
+
+      const totalCount = response.header.totalCount;
+      const numOfRows = response.header.numOfRows;
+      const totalPages = Math.ceil(totalCount / numOfRows);
+
+      for (let pageNo = 1; pageNo <= totalPages; pageNo++) {
+        console.log('pageNo', pageNo);
+        try {
+          const response = await this.request.get<RestaurantQualityResponse>(
+            '/rstr/qlt',
+            {
+              pageNo,
+            },
+          );
+
+          const pageData: RestaurantQualityDto[] = response.body.map(
+            (qlty) => ({
+              rstrId: qlty.RSTR_ID,
+              rstrName: qlty.RSTR_NM,
+              areaName: qlty.AREA_NM,
+              awardInfo: qlty.AWARD_INFO_DSCRN,
+              rtiIndex: qlty.RTI_IDEX,
+              isOnline: qlty.ONLINE_CONV_PRGS_YN,
+              acceptStatusIndex: qlty.ACCPN_STTUS_IDEX,
+              rating: qlty.RATING_IDEX,
+              tradAdvisorRating: qlty.TRPDVSR_GRAD,
+              cTripRating: qlty.CTRIP_GRAD,
+              naverRating: qlty.NAVER_GRAD,
+            }),
+          );
+
+          rstrQualityInfoData.push(...pageData);
+        } catch (err) {
+          console.log('식당 품질정보 데이터 순차적 호출', err);
+          return err;
+        }
+      }
+    } catch (err) {
+      console.log('식당 품질정보 API 호출 에러', err);
+      return err;
+    }
+
+    try {
+      const success = await this.prismaService.restaurantQuality.createMany({
+        data: rstrQualityInfoData,
+        skipDuplicates: true,
+      });
+      console.log(success, '식당 품질정보 테이블 생성 및 데이터 입력 완료');
+      return success;
+    } catch (err) {
+      console.log('식당 품질정보 DB 생성 에러', err);
       return err;
     }
   }

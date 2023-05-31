@@ -37,4 +37,9 @@ export class Food7beachController {
   async getRstrOperationgInfo() {
     return await this.food7beachService.getRstrOperatingInfo();
   }
+
+  @Get('rstr/qlt')
+  async getRstrQuality() {
+    return await this.food7beachService.getRstrQualityInfo();
+  }
 }
