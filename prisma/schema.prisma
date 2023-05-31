@@ -21,6 +21,7 @@ model Restaurant {
   bizLicenceName    String
   updatedAt         DateTime @updatedAt
   menus             Menu[]
+  restaurantOperating RestaurantOperating?
 }
 
 model Menu {
@@ -42,32 +43,34 @@ model Menu {
 }
 
 model RestaurantOperating {
-            rstrId     Int      @id
-            rstrName  String
-            areaName  String
-            perpendicularSeat  Int?
-            seatCount Int?
-            isParking String
-            isWifi String
-            isPlayroom String
-            isPet String
-            isForeignMenu String
-            // 화장실 정보 내용 제외
-            restDay String? // String? 전부 string or null
-            // 영업시간
-            businessHour String? 
-            isHomedelivery String
-            isDisabledConvenience String
-            isDelervService String
-            reservationMethod String?
-            // 온라인 예약 정보 내용 제외 -> 데이터가 거의 null
-            homepageUrl String? 
-            nearLandmarkName String?
-            nearLandmarkLat String?
-            nearLandmarkLng String?
-            nearLandmarkDistance String?
-            isKiosk String
-            isMobilePay String
-            isSmartOrder String
-            representMenuName String?
+  rstrId     Int      @id
+  rstrName  String
+  areaName  String
+  perpendicularSeat  Int?
+  seatCount Int?
+  isParking String
+  isWifi String
+  isPlayroom String
+  isPet String
+  isForeignMenu String
+  // 화장실 정보 내용 제외
+  restDay String? // String? 전부 string or null
+  // 영업시간
+  businessHour String? 
+  isHomedelivery String
+  isDisabledConvenience String
+  isDelervService String
+  reservationMethod String?
+  // 온라인 예약 정보 내용 제외 -> 데이터가 거의 null
+  homepageUrl String? 
+  nearLandmarkName String?
+  nearLandmarkLat String?
+  nearLandmarkLng String?
+  nearLandmarkDistance String?
+  isKiosk String
+  isMobilePay String
+  isSmartOrder String
+  representMenuName String?
+  // Restaurant 테이블과 1 : 1 관계
+  restaurant Restaurant @relation(fields: [rstrId], references: [rstrId])
 }

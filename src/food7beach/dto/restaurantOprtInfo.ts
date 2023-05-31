@@ -13,31 +13,31 @@ export class RestaurantOprtDto {
   rstrId: number;
   rstrName: string;
   areaName: string;
-  perpendicularSeat?: number;
-  seatCount?: number;
+  perpendicularSeat: number | null;
+  seatCount: number | null;
   isParking: string;
   isWifi: string;
   isPlayroom: string;
   isPet: string;
   isForeignMenu: string;
   // 화장실 정보 내용 제외
-  restDay?: string; // String? 전부 string or null
+  restDay: string | null; // String? 전부 string or null
   // 영업시간
-  businessHour?: string;
+  businessHour: string | null;
   isHomedelivery: string;
   isDisabledConvenience: string;
   isDelervService: string;
-  reservationMethod?: string;
+  reservationMethod: string | null;
   // 온라인 예약 정보 내용 제외 -> 데이터가 거의 null
-  homepageUrl?: string;
-  nearLandmarkName?: string;
-  nearLandmarkLat?: string;
-  nearLandmarkLng?: string;
-  nearLandmarkDistance?: string;
+  homepageUrl: string | null;
+  nearLandmarkName: string | null;
+  nearLandmarkLat: string | null;
+  nearLandmarkLng: string | null;
+  nearLandmarkDistance: string | null;
   isKiosk: string;
   isMobilePay: string;
   isSmartOrder: string;
-  representMenuName?: string;
+  representMenuName: string | null;
 }
 
 export interface RestaurantOprtData {

@@ -375,7 +375,7 @@ export class Food7beachService {
             rstrId: oprt.RSTR_ID,
             rstrName: oprt.RSTR_NM,
             areaName: oprt.AREA_NM,
-            perpendicularSeatNum: oprt.PRDL_SEAT_CNT,
+            perpendicularSeat: oprt.PRDL_SEAT_CNT,
             seatCount: oprt.SEAT_CNT,
             isParking: oprt.PRKG_POS_YN,
             isWifi: oprt.WIFI_OFR_YN,
@@ -401,11 +401,23 @@ export class Food7beachService {
 
           rstrOperatingInfoData.push(...pageData);
         } catch (err) {
-          console.log(err);
+          console.log('식당 운영정보 데이터 순차적 호출', err);
         }
       }
     } catch (err) {
-      console.log(err);
+      console.log('식당 운영정보 API 호출 에러', err);
+      return err;
+    }
+
+    try {
+      const success = await this.prismaService.restaurantOperating.createMany({
+        data: rstrOperatingInfoData,
+        skipDuplicates: true,
+      });
+      console.log(success, '식당 운영정보 테이블 생성 및 데이터 입력 완료');
+      return success;
+    } catch (err) {
+      console.log('식당 운영정보 DB 생성 에러', err);
       return err;
     }
   }

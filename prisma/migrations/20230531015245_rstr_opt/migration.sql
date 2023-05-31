@@ -1,0 +1,30 @@
+-- CreateTable
+CREATE TABLE "RestaurantOperating" (
+    "rstrId" INTEGER NOT NULL,
+    "rstrName" TEXT NOT NULL,
+    "areaName" TEXT NOT NULL,
+    "perpendicularSeat" INTEGER,
+    "seatCount" INTEGER,
+    "isParking" TEXT NOT NULL,
+    "isWifi" TEXT NOT NULL,
+    "isPlayroom" TEXT NOT NULL,
+    "isPet" TEXT NOT NULL,
+    "isForeignMenu" TEXT NOT NULL,
+    "restDay" TEXT,
+    "businessHour" TEXT,
+    "isHomedelivery" TEXT NOT NULL,
+    "isDisabledConvenience" TEXT NOT NULL,
+    "isDelervService" TEXT NOT NULL,
+    "reservationMethod" TEXT,
+    "homepageUrl" TEXT,
+    "nearLandmarkName" TEXT,
+    "nearLandmarkLat" TEXT,
+    "nearLandmarkLng" TEXT,
+    "nearLandmarkDistance" TEXT,
+    "isKiosk" TEXT NOT NULL,
+    "isMobilePay" TEXT NOT NULL,
+    "isSmartOrder" TEXT NOT NULL,
+    "representMenuName" TEXT,
+
+    CONSTRAINT "RestaurantOperating_pkey" PRIMARY KEY ("rstrId")
+);
